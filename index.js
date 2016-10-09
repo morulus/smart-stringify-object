@@ -2,6 +2,11 @@
 var isRegexp = require('is-regexp');
 var isPlainObj = require('is-plain-obj');
 
+function functionInnerCode(func) {
+	var funcStr = func.toString();
+	return funcStr.substring(funcStr.indexOf('{')+1, funcStr.toString().lastIndexOf('}')).trim();
+}
+
 module.exports = function (val, opts, pad) {
 	var seen = [];
 
@@ -50,9 +55,12 @@ module.exports = function (val, opts, pad) {
 			val === undefined ||
 			typeof val === 'number' ||
 			typeof val === 'boolean' ||
-			typeof val === 'function' ||
 			isRegexp(val)) {
 			return String(val);
+		}
+
+		if (typeof val === 'function') {
+			return opts.extractFunctionsCode ? functionInnerCode(val) : String(val);
 		}
 
 		if (val instanceof Date) {
