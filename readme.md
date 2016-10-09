@@ -116,6 +116,29 @@ console.log(pretty);
 As you can see, `arr` was printed as a one-liner because its string was shorter
 than 12 characters.
 
+##### extractFunctions
+
+Type: `boolean`   
+Default: `false`
+
+Stringifies inner code of functions.
+
+```js
+var obj = {
+	assets: function() { [foo, bar] }
+}
+
+var pretty = stringifyObject(obj, {
+	extractFunctions: true
+}
+console.log(pretty);
+/*
+{
+	assets: [foo, bar]
+}
+*/
+```
+
 ## License
 
 [BSD license](http://opensource.org/licenses/bsd-license.php) © Yeoman Team

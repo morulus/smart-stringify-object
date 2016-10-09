@@ -130,3 +130,12 @@ it('does not mess up indents for complex objects', function(){
 	assert.equal(stringifyObject(object), "{\n\tarr: [\n\t\t1,\n\t\t2,\n\t\t3\n\t],\n\tnested: {\n\t\thello: 'world'\n\t}\n}");
 	assert.equal(stringifyObject(object, {inlineCharacterLimit: 12}), "{\n\tarr: [1, 2, 3],\n\tnested: {\n\t\thello: 'world'\n\t}\n}");
 });
+
+it('functions to it`s inner code', function(){
+	var object = {
+		arr: function() { [1, 2, 3] },
+		arr2: new Function("[1, 2, 3]")
+	};
+
+	assert.equal(stringifyObject(object, {extractFunctions:true}), "{\n\tarr: [1, 2, 3],\n\tarr2: [1, 2, 3]\n}");
+});

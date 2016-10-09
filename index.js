@@ -60,7 +60,7 @@ module.exports = function (val, opts, pad) {
 		}
 
 		if (typeof val === 'function') {
-			return opts.extractFunctionsCode ? functionInnerCode(val) : String(val);
+			return opts.extractFunctions ? functionInnerCode(val) : String(val);
 		}
 
 		if (val instanceof Date) {
