@@ -141,4 +141,4 @@ console.log(pretty);
 
 ## License
 
-[BSD license](http://opensource.org/licenses/bsd-license.php) © Yeoman Team
+[BSD license](http://opensource.org/licenses/bsd-license.php) © Vladimir Kalmykov, Yeoman Team
