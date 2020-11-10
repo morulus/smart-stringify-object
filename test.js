@@ -137,5 +137,25 @@ it('functions to it`s inner code', function(){
 		arr2: new Function("[1, 2, 3]")
 	};
 
-	assert.equal(stringifyObject(object, {extractFunctions:true}), "{\n\tarr: [1, 2, 3],\n\tarr2: [1, 2, 3]\n}");
+	assert.equal(stringifyObject(object, {functions:"extract"}), "{\n\tarr: [1, 2, 3],\n\tarr2: [1, 2, 3]\n}");
+});
+
+it('execute functions', function(){
+	var x = 3;
+	var object = {
+		arr: () => 2 + x,
+		arr2: function() {
+			return `require(${JSON.stringify(x)})`;
+		}
+	};
+
+	assert.equal(stringifyObject(object, {functions: "exec"}), "{\n\tarr: 5,\n\tarr2: require(3)\n}");
+});
+
+it('simple stringify functions', function(){
+	var object = {
+		arr: () => 'test'
+	};
+
+	assert.equal(stringifyObject(object, {functions: false}), "{\n\tarr: () => 'test'\n}");
 });

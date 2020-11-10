@@ -1,16 +1,12 @@
-# stringify-object [![Build Status](https://secure.travis-ci.org/yeoman/stringify-object.svg?branch=master)](http://travis-ci.org/yeoman/stringify-object)
+> This is fork of [stringify-object](https://github.com/yeoman/stringify-object/blob/master/package.json)
 
-> Stringify an object/array like JSON.stringify just without all the double-quotes.
-
-Useful for when you want to get the string representation of an object in a formatted way.
-
-It also handles circular references and lets you specify quote type.
+Stringify object with code chunks insertion
 
 
 ## Install
 
 ```
-$ npm install --save stringify-object
+$ yarn add smart-stringify-object
 ```
 
 
@@ -20,12 +16,14 @@ $ npm install --save stringify-object
 var obj = {
 	foo: 'bar',
 	'arr': [1, 2, 3],
-	nested: { hello: "world" }
+	nested: { hello: "world" },
+	method: () => 'function () { return this.foo; }'
 };
 
 var pretty = stringifyObject(obj, {
 	indent: '  ',
-	singleQuotes: false
+	singleQuotes: false,
+	functions: 'exec'
 });
 
 console.log(pretty);
@@ -39,11 +37,62 @@ console.log(pretty);
 	],
 	nested: {
 		hello: "world"
-	}
+	},
+	method: function () { return this.foo; }
 }
 */
 ```
 
+## Stringify functions
+
+You can choose how exactly will be stringified object's properties of function type.
+
+By default, the functions will be stringified as they were described in a code but you can use the functions as a tool to generate javascript code. There are two variants to use the functions in such a way:
+
+### Exec
+
+Option: `function: "exec"
+
+Execute a function and insert the result as a code chunk.
+
+```js
+const obj = {
+	name: path.basename(__filename),
+	module: () => `require(${JSON.stringify(__filename)})`
+}
+
+stringify(obj, {
+	functions: "exec"
+})
+/*
+{
+	name: 'example.js',
+	module: require("path/to/example.js")
+}
+*/
+```
+
+### Extract
+
+Option: `function: "extract"`
+
+Get function's body and insert it as code chunk.
+
+```js
+var obj = {
+	key: function() { Symbol() }
+}
+
+var pretty = stringifyObject(obj, {
+	functions: "extract"
+}
+console.log(pretty);
+/*
+{
+	key:  Symbol()
+}
+*/
+```
 
 ## API
 
@@ -116,25 +165,47 @@ console.log(pretty);
 As you can see, `arr` was printed as a one-liner because its string was shorter
 than 12 characters.
 
-##### extractFunctions
+##### functions
 
-Type: `boolean`   
+Type: `"extract" | "exec" | false`   
 Default: `false`
 
-Stringifies inner code of functions.
+Choose method to stringify functions
 
+- **extract** Extract function body as raw code
+- **exec** Execute function and use its result as raw code
+
+Exctract example:
 ```js
 var obj = {
-	assets: function() { [foo, bar] }
+	key: function() { Symbol() }
 }
 
 var pretty = stringifyObject(obj, {
-	extractFunctions: true
+	functions: "extract"
 }
 console.log(pretty);
 /*
 {
-	assets: [foo, bar]
+	key:  Symbol()
+}
+*/
+```
+
+Exec example:
+```js
+var moduleName = "path/to/module.js"
+var obj = {
+	myModule: () => `require(${JSON.stringify(moduleName)})`
+}
+
+var pretty = stringifyObject(obj, {
+	functions: "exec"
+}
+console.log(pretty);
+/*
+{
+	myModule:  require("path/to/module.js")
 }
 */
 ```

@@ -1,13 +1,20 @@
 {
-  "name": "stringify-object-extract-functions",
-  "version": "2.4.1",
-  "description": "Stringify an object/array like JSON.stringify just without all the double-quotes",
+  "name": "smart-stringify-object",
+  "version": "0.1.0",
+  "description": "Stringify object with code chunks insertion",
   "license": "BSD-2-Clause",
-  "repository": "morulus/stringify-object-extract-functions",
-  "author": {
-    "name": "Vladimir Morulus",
-    "email": "vladimirmorulus@gmail.com"
-  },
+  "repository": "morulus/smart-extract-functions",
+  "authors": [
+    {
+      "name": "Sindre Sorhus",
+      "email": "sindresorhus@gmail.com",
+      "url": "sindresorhus.com"
+    },
+    {
+      "name": "Vladimir Kalmykov",
+      "email": "vladimirmorulus@gmail.com"
+    }
+  ],
   "engines": {
     "node": ">=0.10.0"
   },
@@ -19,6 +26,8 @@
   ],
   "keywords": [
     "object",
+    "smart",
+    "functions",
     "stringify",
     "pretty",
     "print",
